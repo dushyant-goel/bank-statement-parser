@@ -1,29 +1,8 @@
+
 import re
 import pdfplumber
 
 from pathlib import Path
-
-def main():
-
-    with sqlite3.connect('database') as conn:
-        db_manager.create_db(conn)
-
-    directory = 'statements'
-    for pdfpath in Path(directory).rglob('*.pdf'):
-        bank = pdfpath.parts[-2]
-
-        if bank == 'BB' :
-            parse_bb(pdfpath)
-        elif bank == 'BNI':
-            parse_bni(pdfpath)
-        elif bank == 'FCB':
-            parse_fcb(pdfpath)
-        elif bank == 'ST':
-            parse_st(pdfpath)
-        else:
-            print("bank implementation not found")
-
-    
 
 def parse_bb(pdfpath):
     text = ""
@@ -35,11 +14,11 @@ def parse_bb(pdfpath):
         # print(text)
         transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
 
+    return transactions
     # print(transactions)
-
-    for transaction in transactions:
-        date, description, credit, debit, balance = transaction
-        # print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
+    # for transaction in transactions:
+    #     date, description, credit, debit, balance = transaction
+    #     print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
 
 def parse_bni(pdfpath):
     text = ""
@@ -51,11 +30,12 @@ def parse_bni(pdfpath):
         # print(text)
         transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
 
+    return transactions
     # print(transactions)
 
-    for transaction in transactions:
-        date, description, credit, debit, balance = transaction
-        # print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
+    # for transaction in transactions:
+    #     date, description, credit, debit, balance = transaction
+    #     print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
 
 def parse_fcb(pdfpath):
     text = ""
@@ -67,11 +47,12 @@ def parse_fcb(pdfpath):
         # print(text)
         transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
 
+    return transactions
     # print(transactions)
 
-    for transaction in transactions:
-        date, description, credit, debit, balance = transaction
-        # print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")    
+    # for transaction in transactions:
+    #     date, description, credit, debit, balance = transaction
+    #     print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")    
 
 def parse_st(pdfpath):
     text = ""
@@ -82,9 +63,8 @@ def parse_st(pdfpath):
 
         # print(text)
     
-    transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})', text)
-
-    # print(transactions)
+    raw_transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})', text)
+    transactions = []
 
     previous_balance = 0.0
     for transaction in transactions:
@@ -100,8 +80,9 @@ def parse_st(pdfpath):
 
         balance = previous_balance - amount
         previous_balance = balance
-        print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
 
+        transactions += [(date, description, credit, debit, balance)]
 
-if __name__ == '__main__':
-    main()
+        # print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
+    
+    return transactions
