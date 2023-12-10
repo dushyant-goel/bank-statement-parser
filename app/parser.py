@@ -14,6 +14,7 @@ def parse_bb(pdfpath):
 
     transactions = []
     for transaction in raw_transactions:
+        date, description, credit, debit, balance = transaction
         transactions += [('BB', date, description, credit, debit, balance)]
         #print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
     
@@ -30,6 +31,7 @@ def parse_bni(pdfpath):
     
     transactions = []
     for transaction in raw_transactions:
+        date, description, credit, debit, balance = transaction
         transactions += [('BNI', date, description, credit, debit, balance)]
         # print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
     return transactions
@@ -44,7 +46,8 @@ def parse_fcb(pdfpath):
         raw_transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
 
     transactions = []
-    for transaction in transactions:
+    for transaction in raw_transactions:
+        date, description, credit, debit, balance = transaction
         transactions += [('FCB',date, description, credit, debit, balance)]
     #   print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")    
     
@@ -63,7 +66,7 @@ def parse_st(pdfpath):
     transactions = []
 
     previous_balance = 0.0
-    for transaction in transactions:
+    for transaction in raw_transactions:
         date, description, amount = transaction
         amount = float(amount)
 

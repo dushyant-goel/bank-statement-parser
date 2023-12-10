@@ -1,8 +1,9 @@
-# import re
-# import pdfplumber
+import sqlite3
+
 from pathlib import Path
 
-import app
+from app.parser import *
+from app.db_manager import *
 
 def main():
 
@@ -24,9 +25,8 @@ def main():
             print("bank implementation not found")
 
     with sqlite3.connect('database') as conn:
-        db_manager.create_db(conn)
-        db_manager.add_to_db(conn, transactions)
-
+        create_db(conn)
+        add_to_db(conn, transactions)
 
 if __name__ == '__main__':
     main()

@@ -18,9 +18,9 @@ def add_to_db(conn, transactions):
     conn.executemany(
         """
         INSERT INTO transactions
-        (date, description, credit, debit, balance)
+        (account, date, description, credit, debit, balance)
         VALUES
-        (?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?)
         """,
         transactions
     )
@@ -43,5 +43,12 @@ def get_by_date_range(conn, datefrom, dateuntil):
 ).fetchall()
 
 def get_balance_by_date(conn):
-    pass
+    conn.execute(
+        """ 
+        SELECT account_no, max(date), balance
+        FROM your_table
+        WHERE date <= ?  
+        GROUP BY account_no
+        """
+    )
 
