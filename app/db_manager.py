@@ -47,19 +47,23 @@ def get_by_date_range(conn, date_from, date_to):
 
     print(result_set)
 
-def get_balance_by_date(conn):
+def get_balance_by_date(conn, date):
     result_set = conn.execute(
         """ 
-        SELECT account_no, max(date), balance
-        FROM your_table
+        SELECT account, max(date), balance
+        FROM transactions
         WHERE date <= ?  
-        GROUP BY account_no
+        GROUP BY account
         """, [date]
     )
 
     balance = 0.0
     for transaction in result_set:
         print(transaction)
-        balance += float(transaction[2].replace(',',''))
-
+        
+        if(isinstance(transaction[2], str) ):
+            balance += float(transaction[2].replace(',',''))
+        else:
+            balance += transaction[2]
+        
     print("total across accounts: ?", balance)

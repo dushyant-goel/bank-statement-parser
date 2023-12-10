@@ -52,7 +52,7 @@ def main():
             get_by_date_range(conn, date_from, date_to)
         elif user_input == '3':
             date = input("Enter date to get balances (dd/mm/yyyy): ")
-            get_balance_by_date(date)
+            get_balance_by_date(conn, date)
         elif user_input.lower() == 'q':
             print("Exiting the loop...")
             break  
