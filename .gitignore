@@ -1,0 +1,6 @@
+env/*
+statements/*
+templates/*
+
+.DS_Store
+test.ipynb
