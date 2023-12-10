@@ -2,8 +2,6 @@
 import re
 import pdfplumber
 
-from pathlib import Path
-
 def parse_bb(pdfpath):
     text = ""
 
@@ -12,13 +10,14 @@ def parse_bb(pdfpath):
             text += page.extract_text(x_tolerance=1)
 
         # print(text)
-        transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
+        raw_transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
 
+    transactions = []
+    for transaction in raw_transactions:
+        transactions += [('BB', date, description, credit, debit, balance)]
+        #print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
+    
     return transactions
-    # print(transactions)
-    # for transaction in transactions:
-    #     date, description, credit, debit, balance = transaction
-    #     print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
 
 def parse_bni(pdfpath):
     text = ""
@@ -27,15 +26,13 @@ def parse_bni(pdfpath):
         for page in pdf.pages:
             text += page.extract_text(x_tolerance=1)
 
-        # print(text)
-        transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
-
+        raw_transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
+    
+    transactions = []
+    for transaction in raw_transactions:
+        transactions += [('BNI', date, description, credit, debit, balance)]
+        # print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
     return transactions
-    # print(transactions)
-
-    # for transaction in transactions:
-    #     date, description, credit, debit, balance = transaction
-    #     print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
 
 def parse_fcb(pdfpath):
     text = ""
@@ -44,15 +41,14 @@ def parse_fcb(pdfpath):
         for page in pdf.pages:
             text += page.extract_text(x_tolerance=1)
 
-        # print(text)
-        transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
+        raw_transactions = re.findall(r'(\d{2}/\d{2}/\d{4})\s(.*?)\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})\s([\d,]+\.\d{2})', text)
 
+    transactions = []
+    for transaction in transactions:
+        transactions += [('FCB',date, description, credit, debit, balance)]
+    #   print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")    
+    
     return transactions
-    # print(transactions)
-
-    # for transaction in transactions:
-    #     date, description, credit, debit, balance = transaction
-    #     print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")    
 
 def parse_st(pdfpath):
     text = ""
@@ -81,8 +77,7 @@ def parse_st(pdfpath):
         balance = previous_balance - amount
         previous_balance = balance
 
-        transactions += [(date, description, credit, debit, balance)]
-
+        transactions += [('ST', date, description, credit, debit, balance)]
         # print(f"Date: {date}, Description: {description}, Credit: {credit}, Debit: {debit}, Balance: {balance}")
     
     return transactions

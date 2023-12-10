@@ -1,8 +1,8 @@
 # import re
 # import pdfplumber
+from pathlib import Path
 
-from app import db_manager
-from app import parser
+import app
 
 def main():
 

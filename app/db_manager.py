@@ -5,6 +5,7 @@ def create_db(conn):
         """
         CREATE TABLE transactions (
             id INTEGER PRIMARY KEY,
+            account varchar(255),
             date datetime,
             description varchar(255),
             credit REAL,
@@ -32,8 +33,14 @@ def get_existing_trans(conn):
         """
     ).fetchall()
 
-def get_by_date_range(conn):
-    pass
+def get_by_date_range(conn, datefrom, dateuntil):
+    conn.execute(
+    """
+    SELECT *
+    FROM transactions
+    WHERE date BETWEEN ? AND ? 
+    """, [datefrom, dateuntil]
+).fetchall()
 
 def get_balance_by_date(conn):
     pass
