@@ -4,6 +4,10 @@ import pdfplumber
 from pathlib import Path
 
 def main():
+
+    with sqlite3.connect('database') as conn:
+        db_manager.create_db(conn)
+
     directory = 'statements'
     for pdfpath in Path(directory).rglob('*.pdf'):
         bank = pdfpath.parts[-2]
@@ -18,6 +22,8 @@ def main():
             parse_st(pdfpath)
         else:
             print("bank implementation not found")
+
+    
 
 def parse_bb(pdfpath):
     text = ""
