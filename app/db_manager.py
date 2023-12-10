@@ -33,22 +33,33 @@ def get_existing_trans(conn):
         """
     ).fetchall()
 
-def get_by_date_range(conn, datefrom, dateuntil):
-    conn.execute(
-    """
-    SELECT *
-    FROM transactions
-    WHERE date BETWEEN ? AND ? 
-    """, [datefrom, dateuntil]
-).fetchall()
+    print(existing_rows)
+
+def get_by_date_range(conn, date_from, date_to):
+    result_set = conn.execute(
+        """
+        SELECT *
+        FROM transactions
+        WHERE date BETWEEN ? AND ? 
+        """, 
+        [date_from, date_to]
+    ).fetchall()
+
+    print(result_set)
 
 def get_balance_by_date(conn):
-    conn.execute(
+    result_set = conn.execute(
         """ 
         SELECT account_no, max(date), balance
         FROM your_table
         WHERE date <= ?  
         GROUP BY account_no
-        """
+        """, [date]
     )
 
+    balance = 0.0
+    for transaction in result_set:
+        print(transaction)
+        balance += float(transaction[2].replace(',',''))
+
+    print("total across accounts: ?", balance)
