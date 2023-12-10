@@ -14,5 +14,13 @@ The three functionalities are :
 2. List all transactions by date range
 3. List total balance on the date across all accounts, and their total. If the date is earlier than the first known transaction in all accounts, the default balance is 0.
 
-
+Structure
+- statements folder contains the bank statement pdfs
+- app folder contains the application logic:
+- - db_manager for database queries
+  - parser for parsing pdfs
+  - app.py for database connection and interactive loop.
+ 
+To Do
+- Gmail connection for auto download of bank-statements
 
